@@ -35,8 +35,8 @@ Route::prefix('table-booking-schedule')->group(function() {
     Route::get('/', [TableBookingScheduleController::class, 'index']);
     Route::post('/', [TableBookingScheduleController::class, 'store']);
     Route::get('/{id}', [TableBookingScheduleController::class, 'view']);
-    Route::post('/{id}', [TableBookingScheduleController::class, 'update']);
 });
+Route::get('/table-booking-schedule-search/{search}', [TableBookingScheduleController::class, 'search']);
 Route::get('/table-booking-schedule-by-date-time', [TableBookingScheduleController::class, 'indexByDateTime']);
 Route::get('/table-booking-schedule-by-floor-date', [TableBookingScheduleController::class, 'indexByFloorDate']);
 Route::get('/table-booking-schedule-by-floor-time', [TableBookingScheduleController::class, 'indexByFloorTime']);

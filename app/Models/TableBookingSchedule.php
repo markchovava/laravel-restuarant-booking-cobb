@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class TableBookingSchedule extends Model
-{
+{ 
     protected $fillable = [
         'id',
         'userId',
+        'bookingRef',
         'tableFloorPlanId',
         'date',
         'time',
@@ -16,6 +17,7 @@ class TableBookingSchedule extends Model
         'css',
         'fullName',
         'email',
+        'phone',
         'numberOfGuests',
         'notes',
         'created_at',

@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\RecycleSchedule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,18 +9,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NotifyRecyclerMail extends Mailable
+class BookingCustomerMail extends Mailable
 {
     use Queueable, SerializesModels;
-
-    public $schedule;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(RecycleSchedule $schedule)
+    public function __construct()
     {
-        $this->schedule = $schedule;
+        //
     }
 
     /**
@@ -30,7 +27,7 @@ class NotifyRecyclerMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Recycle Mate Notification',
+            subject: 'Booking Customer Mail',
         );
     }
 
@@ -40,15 +37,7 @@ class NotifyRecyclerMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'notify-recycler', 
-            with: [
-                'centerName' => $this->schedule->centerName,
-                'customerName' => $this->schedule->customerName,
-                'requestDate' => $this->schedule->requestDate,
-                'requestTime' => $this->schedule->requestTime,
-                'customerPhone' => $this->schedule->customerPhone,
-                'customerAddress' => $this->schedule->customerAddress,
-            ]
+            view: 'view.name',
         );
     }
 

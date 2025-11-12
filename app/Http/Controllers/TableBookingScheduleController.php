@@ -7,12 +7,19 @@ use App\Http\Resources\TableFloorPlanResource;
 use App\Models\TableBookingSchedule;
 use App\Models\TableFloorPlan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class TableBookingScheduleController extends Controller
 {
 
     public $perPage = 20;
+
+    public function generateRandomText($length = 8) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $shuffled = str_shuffle($characters);
+        return substr($shuffled, 0, $length);
+    }
 
 
     public function indexByDateTime(Request $request){
@@ -137,8 +144,20 @@ class TableBookingScheduleController extends Controller
 
     public function index(){
         $data = TableBookingSchedule::with(['table_floor_plan'])
+            ->orderBy('updated_at', 'DESC')
             ->paginate($this->perPage);
-        return  TableBookingScheduleResource::collection($data);
+        return TableBookingScheduleResource::collection($data);
+    }
+
+    public function search($search){
+        if(!empty($search)){
+            $data = TableBookingSchedule::with(['table_floor_plan'])
+                ->where('fullName', 'LIKE', '%' . $search . '%')
+                ->orderBy('updated_at', 'DESC')
+                ->paginate($this->perPage);
+            return TableBookingScheduleResource::collection($data);
+        }
+        return $this->index();
     }
 
     public function view($id){ 
@@ -161,7 +180,7 @@ class TableBookingScheduleController extends Controller
                 'phone',
                 'numberOfGuests',
                 'notes',
-            ])
+            ], ['bookingRef' => 'REF' . date('Ymd') . $this->generateRandomText(7)])
         ));
         return response()->json([
             'status' => 1,
@@ -171,25 +190,26 @@ class TableBookingScheduleController extends Controller
     }
 
     public function update(Request $request, $id){ 
+        $userId = Auth::user()->id;
         $data = TableBookingSchedule::find($id);
         $data->update(array_merge(
             $request->only([
-                'userId',
                 'tableFloorPlanId',
+                'fullName',
+                'email',
+                'phone',
                 'date',
                 'time',
                 'status',
                 'css',
-                'fullName',
-                'email',
-                'phone',
                 'numberOfGuests',
                 'notes',
-            ])
+            ], ['userId' => $userId])
         ));
         return response()->json([
             'status' => 1,
-            'data' => new TableBookingScheduleResource($data)
+            'data' => new TableBookingScheduleResource($data),
+            'message' => 'Data is saved successfully.'
         ]);
     }
 
@@ -204,7 +224,7 @@ class TableBookingScheduleController extends Controller
         }
         $data->delete();
         return response()->json([
-            'message' => 'User deleted Successfully.',
+            'message' => 'Table Booking deleted Successfully.',
             'status' => 1,
             'data' => []
         ]);

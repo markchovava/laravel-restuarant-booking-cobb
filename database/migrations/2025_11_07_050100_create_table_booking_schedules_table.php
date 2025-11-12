@@ -17,11 +17,13 @@ return new class extends Migration
             $table->bigInteger('tableFloorPlanId')->nullable();
             $table->mediumInteger('userId')->nullable();
             $table->string('date')->nullable();
+            $table->string('bookingRef')->nullable();
             $table->string('time')->nullable();
             $table->string('status')->nullable();
             $table->string('css')->nullable();
             $table->string('fullName')->nullable();
             $table->string('email')->nullable();
+            $table->string('phone')->nullable();
             $table->string('numberOfGuests')->nullable();
             $table->longText('notes')->nullable();
             $table->timestamps();

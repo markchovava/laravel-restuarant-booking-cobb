@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\RecycleSchedule;
+use App\Models\TableBookingSchedule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,20 +10,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NotifyCustomerMail extends Mailable
+class BookingAdminMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-
-
-    public $schedule;
-
+    public $data;
     /**
      * Create a new message instance.
      */
-    public function __construct(RecycleSchedule $schedule)
+    public function __construct(TableBookingSchedule $data)
     {
-        $this->schedule = $schedule;
+        $this->data = $data;
     }
 
     /**
@@ -32,7 +29,7 @@ class NotifyCustomerMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Recycle Mate Notification',
+            subject: 'NEW BOOKING MAIL',
         );
     }
 
@@ -42,14 +39,15 @@ class NotifyCustomerMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'notify-customer', 
+            view: 'notify-admin',
             with: [
-                'customerName' => $this->schedule->customerName,
-                'centerName' => $this->schedule->centerName,
-                'collectionDate' => $this->schedule->collectionDate,
-                'collectionTime' => $this->schedule->collectionTime,
-                'recyclerPhone' => $this->schedule->recyclerPhone,
-                'recyclerName' => $this->schedule->recyclerName,
+                'bookingRef' => $this->data->bookingRef,
+                'fullName' => $this->data->fullName,
+                'email' => $this->data->email,
+                'phone' => $this->data->phone,
+                'numberOfGuests' => $this->data->numberOfGuests,
+                'date' => $this->data->date,
+                'time' => $this->data->time,
             ]
         );
     }
