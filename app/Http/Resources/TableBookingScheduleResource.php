@@ -18,6 +18,7 @@ class TableBookingScheduleResource extends JsonResource
         return [
             'id' => $this->id,
             'userId' => $this->userId,
+            'bookingRef' => $this->bookingRef,
             'tableFloorPlanId' => $this->tableFloorPlanId,
             'date' => $this->date,
             'time' => $this->time,

@@ -4,11 +4,11 @@ namespace App\Mail;
 
 use App\Models\TableBookingSchedule;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+
 
 class BookingAdminMail extends Mailable
 {
@@ -29,9 +29,10 @@ class BookingAdminMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'NEW BOOKING MAIL',
+            subject: 'NEW BOOKING NOTIFICATION - ' . $this->data->bookingRef,
         );
     }
+    
 
     /**
      * Get the message content definition.
@@ -48,6 +49,7 @@ class BookingAdminMail extends Mailable
                 'numberOfGuests' => $this->data->numberOfGuests,
                 'date' => $this->data->date,
                 'time' => $this->data->time,
+                'notes' => $this->data->notes,
             ]
         );
     }

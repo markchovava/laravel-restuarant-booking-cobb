@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\TableBookingScheduleResource;
 use App\Http\Resources\TableFloorPlanResource;
+use App\Mail\BookingAdminMail;
 use App\Models\TableBookingSchedule;
 use App\Models\TableFloorPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class TableBookingScheduleController extends Controller
 {
@@ -152,7 +154,7 @@ class TableBookingScheduleController extends Controller
     public function search($search){
         if(!empty($search)){
             $data = TableBookingSchedule::with(['table_floor_plan'])
-                ->where('fullName', 'LIKE', '%' . $search . '%')
+                ->where('bookingRef', 'LIKE', '%' . $search . '%')
                 ->orderBy('updated_at', 'DESC')
                 ->paginate($this->perPage);
             return TableBookingScheduleResource::collection($data);
@@ -167,6 +169,7 @@ class TableBookingScheduleController extends Controller
     }
 
     public function store(Request $request){ 
+        
         $data = TableBookingSchedule::create(array_merge(
             $request->only([
                 'userId',
@@ -180,8 +183,13 @@ class TableBookingScheduleController extends Controller
                 'phone',
                 'numberOfGuests',
                 'notes',
-            ], ['bookingRef' => 'REF' . date('Ymd') . $this->generateRandomText(7)])
+            ]),
+            ['bookingRef' => 'REF' . date('Ymd') . $this->generateRandomText(7)]
         ));
+        /*Log::Info('Table Booking Schedule');
+        Log::Info($data); */
+        Mail::to(env('ADMIN_EMAIL'))->send(new BookingAdminMail($data));
+        //Mail::to('info@cobblestonezw.com')->send(new BookingAdminMail($data));
         return response()->json([
             'status' => 1,
             'message' => "Booking submitted successfully, check you email for more info.",
