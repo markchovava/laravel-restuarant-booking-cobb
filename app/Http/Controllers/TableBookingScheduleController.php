@@ -192,7 +192,7 @@ class TableBookingScheduleController extends Controller
         //Mail::to('info@cobblestonezw.com')->send(new BookingAdminMail($data));
         return response()->json([
             'status' => 1,
-            'message' => "Booking submitted successfully, check you email for more info.",
+            'message' => "Your Booking was submitted successfully, please check your email for confirmation message.",
             'data' => new TableBookingScheduleResource($data)
         ]);
     }
