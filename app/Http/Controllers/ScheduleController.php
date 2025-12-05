@@ -50,6 +50,8 @@ class ScheduleController extends Controller
         $schedule->created_at = now();
         $schedule->updated_at = now();
         $schedule->save();
+        Log::info('$schedule');
+        Log::info($schedule);
         /*  */
         $tables = Table::where('locationId', $request->locationId)->get();
         if( $tables->isEmpty() ){
@@ -63,7 +65,10 @@ class ScheduleController extends Controller
         foreach($tables as $i) {
             $data = new ScheduleBooking();
             $data->userId = $userId;
+            $data->date = $request->date;
+            $data->time = $request->time;
             $data->locationId = $request->locationId;
+            $data->scheduleId = $schedule->id;
             $data->tableName = $i->name;
             $data->taken = $i->quantity;
             $data->quantity = $i->quantity;
@@ -220,25 +225,21 @@ class ScheduleController extends Controller
         $date = $request->date;
         $time = $request->time;
         $id = $request->scheduleId;
-        $scheduleBooking = ScheduleBooking::where('scheduleId', $id)
-                ->where('date', $date)
-                ->where('time', $time)
-                ->first();
-        if($scheduleBooking){
-            $scheduleBooking->delete();
-        }
-        $booking = Booking::where('scheduleId', $id)
-                ->where('date', $date)
-                ->where('time', $time)
-                ->first();
-        if($booking){
-            $booking->delete();
-        }
+        
+        // Delete all matching ScheduleBooking records
+        ScheduleBooking::where('scheduleId', $id)
+            ->delete();
+        
+        // Delete all matching Booking records
+        Booking::where('scheduleId', $id)
+            ->delete();
+        
+        // Delete the Schedule
         $data = Schedule::find($id);
         if($data) {
             $data->delete();
         }
-        ///Log::info();
+    
         return response()->json([
             'status' => 1,
             'message' => 'Data deleted successfully.',
