@@ -2,16 +2,19 @@
 // config/cors.php
 
 return [
-    'paths' => ['api/*', 'sanctum/csrf-cookie', 'login/*', 'register/*', "schedule-of-customer-unauth/*"],
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
     
     'allowed_methods' => ['*'],
     
     'allowed_origins' => [
         'http://localhost:3000',
         'http://127.0.0.1:3000',
-        'https://next-recycle-center-olive.vercel.app',
-        'https://next-recycle-center-olive.vercel.app/login',
-        'https://fldesigners.xyz',
+        'https://next-restuarant-booking-cobb.vercel.app/',
+        'https://next-restuarant-booking-cobb.vercel.app/auth/login',
+        'https://next-restuarant-booking-cobb.vercel.app/auth/login/',
+        'https://next-restuarant-booking-cobb.vercel.app/auth/register',
+        'https://next-restuarant-booking-cobb.vercel.app/auth/register/',
+        'https://*.vercel.app',
         '',
     ],
     
