@@ -21,7 +21,7 @@ class AuthController extends Controller
         }
         $data = new User();
         $data->isAdmin = 0;
-        $data->accessLevel = 1;
+        $data->roleLevel = 1;
         $data->email = $request->email;
         $data->code = $request->password;
         $data->password = Hash::make($request->password);

@@ -25,7 +25,7 @@ class User extends Authenticatable
         'name',
         'phone',
         'isAdmin',
-        'accessLevel',
+        'roleLevel',
         'email',
         'code',
         'password',

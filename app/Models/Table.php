@@ -4,25 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TableFloorPlan extends Model
+class Table extends Model
 {
-    
     protected $fillable = [
         'id',
         'userId',
+        'locationId',
         'name',
-        'd',
-        'details',
-        'floor',
+        'seats',
+        'quantity',
+        'status',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
-    public function table_booking_schedules(){
-        return $this->hasMany(TableBookingSchedule::class, 'tableFloorPlanId', 'id');
+    public function location() {
+        return $this->belongsTo(Location::class, 'locationId', 'id');
     }
 
     public function user(){
         return $this->belongsTo(User::class, 'userId', 'id');
     }
+
 }

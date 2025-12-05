@@ -1,9 +1,12 @@
 <?php
 use App\Http\Controllers\AppInfoController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\TableBookingScheduleController;
-use App\Http\Controllers\TableFloorPlanController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\ScheduleBookingController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\TableController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -14,46 +17,61 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/', [AppInfoController::class, 'view']);
 
+/* CONTACT */
+Route::post('/contact', [ContactController::class, 'store']);
+
+
 /* APP INFORMATION */
 Route::prefix('app-info')->group(function() {
     Route::get('/', [AppInfoController::class, 'view']);
 }); 
 
+   
+/* APPINFO */
+Route::prefix('app-info')->group(function() {
+    Route::get('/', [AppInfoController::class, 'view']);
+}); 
 
-/* CONTACT */
-Route::prefix('contact')->group(function() {
-    Route::get('/', [ContactController::class, 'index']);
-    Route::post('/', [ContactController::class, 'store']);
-    Route::get('/{id}', [ContactController::class, 'view']);
+/* BOOKING */
+Route::prefix('booking')->group(function() {
+    Route::get('/', [BookingController::class, 'index']);
+    Route::post('/', [BookingController::class, 'store']);
+    Route::get('/{id}', [BookingController::class, 'view']);
 });
-Route::get('/contact-search/{search}', [ContactController::class, 'search']);
-Route::get('/contact-all', [ContactController::class, 'indexAll']);
+Route::get('/booking-search', [BookingController::class, 'search']);
+Route::get('/booking-all', [BookingController::class, 'indexAll']);
 
 
-/* TABLE BOOKING SCHEDULE */
-Route::prefix('table-booking-schedule')->group(function() {
-    Route::get('/', [TableBookingScheduleController::class, 'index']);
-    Route::post('/', [TableBookingScheduleController::class, 'store']);
-    Route::get('/{id}', [TableBookingScheduleController::class, 'view']);
+/* SCHEDULE */
+Route::get('/schedule/{id}', [ScheduleController::class, 'view']);
+Route::get('/schedule-by-date-time', [ScheduleController::class, 'indexByDateTime']);
+
+
+/* SCHEDULE BOOKING */
+Route::prefix('schedule-booking')->group(function() {
+    Route::get('/', [ScheduleBookingController::class, 'index']);
+    Route::post('/', [ScheduleBookingController::class, 'store']);
+    Route::get('/{id}', [ScheduleBookingController::class, 'view']);
 });
-Route::get('/table-booking-schedule-search/{search}', [TableBookingScheduleController::class, 'search']);
-Route::get('/table-booking-schedule-by-date-time', [TableBookingScheduleController::class, 'indexByDateTime']);
-Route::get('/table-booking-schedule-by-floor-date', [TableBookingScheduleController::class, 'indexByFloorDate']);
-Route::get('/table-booking-schedule-by-floor-time', [TableBookingScheduleController::class, 'indexByFloorTime']);
-Route::get('/table-booking-schedule-by-date', [TableBookingScheduleController::class, 'indexByDate']);
-Route::get('/table-booking-schedule-by-status', [TableBookingScheduleController::class, 'indexByStatus']);
+Route::get('/schedule-booking-search/{search}', [ScheduleBookingController::class, 'search']);
+Route::get('/schedule-booking-by-date-time-schedule', [ScheduleBookingController::class, 'indexByDateTimeSchedule']);
+   
 
-
-Route::prefix('table-floor-plan')->group(function() {
-    Route::get('/', [TableFloorPlanController::class, 'index']);
-    Route::get('/{id}', [TableFloorPlanController::class, 'view']);
+/* LOCATION */
+Route::prefix('location')->group(function() {
+    Route::get('/', [LocationController::class, 'index']);
+    Route::get('/{id}', [LocationController::class, 'view']);
 });
-Route::get('/table-floor-plan-by-floor', [TableFloorPlanController::class, 'indexByFloor']);
-Route::get('/table-floor-plan-search/{search}', [TableFloorPlanController::class, 'search']);
-Route::get('/table-floor-plan-search-all/{search}', [TableFloorPlanController::class, 'searchAll']);
-Route::get('/table-floor-plan-all', [TableFloorPlanController::class, 'indexAll']);
-Route::get('/table-floor-plan-all-with-booking', [TableFloorPlanController::class, 'indexAllWithBooking']);
+Route::get('/location-search/{search}', [LocationController::class, 'search']);
+Route::get('/location-all', [LocationController::class, 'indexAll']);
 
 
+/* TABLE */
+Route::prefix('table')->group(function() {
+    Route::get('/', [TableController::class, 'index']);
+    Route::get('/{id}', [TableController::class, 'view']);
+});
+Route::get('/table-search', [TableController::class, 'search']);
+Route::get('/table-all', [TableController::class, 'indexAll']);
 
 

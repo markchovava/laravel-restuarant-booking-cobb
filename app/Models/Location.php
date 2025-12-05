@@ -4,28 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AppInfo extends Model
+class Location extends Model
 {
     protected $fillable = [
         'id',
         'userId',
         'name',
-        'phone',
-        'email',
-        'website',
-        'address',
-        'whatsapp',
-        'facebook',
-        'instagram',
+        'slug',
+        'status',
         'description',
+        'tablesTotal',
         'created_at',
         'updated_at',
     ];
-
 
     public function user(){
         return $this->belongsTo(User::class, 'userId', 'id');
     }
 
-    
+    public function tables(){
+        return $this->hasMany(Table::class, 'locationId', 'id');
+    }
+
 }

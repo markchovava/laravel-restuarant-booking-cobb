@@ -8,18 +8,17 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     * 
      */
-    
     public function up(): void
     {
-        Schema::create('table_floor_plans', function (Blueprint $table) {
+        Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->mediumInteger('userId')->nullable();
+            $table->bigInteger('userId')->nullable();
             $table->string('name')->nullable();
-            $table->longText('d')->nullable();
-            $table->mediumText('details')->nullable();
-            $table->string('floor')->nullable();
+            $table->string('slug')->nullable();
+            $table->string('tablesTotal')->nullable();
+            $table->string('description')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('table_floor_plans');
+        Schema::dropIfExists('locations');
     }
 };

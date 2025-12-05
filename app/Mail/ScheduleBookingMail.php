@@ -2,23 +2,24 @@
 
 namespace App\Mail;
 
+use App\Models\ScheduleBooking;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class BookingCustomerMail extends Mailable
+class ScheduleBookingMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $data;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(ScheduleBooking $data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -27,7 +28,7 @@ class BookingCustomerMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Booking Customer Mail',
+            subject: 'NEW BOOKING MAIL',
         );
     }
 
@@ -37,7 +38,7 @@ class BookingCustomerMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'booking',
         );
     }
 

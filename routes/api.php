@@ -2,20 +2,22 @@
 
 use App\Http\Controllers\AppInfoController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\TableBookingScheduleController;
-use App\Http\Controllers\TableFloorPlanController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\ScheduleBookingController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\TableController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
 Route::group(['middleware' => ['auth:sanctum']], function() {
-
     
     /* PROFILE */
     Route::prefix('profile')->group(function() {
@@ -26,26 +28,71 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('/email', [AuthController::class, 'email']);
     Route::get('/logout', [AuthController::class, 'logout']);
     
-
     /* APPINFO */
     Route::prefix('app-info')->group(function() {
         Route::get('/', [AppInfoController::class, 'view']);
         Route::post('/', [AppInfoController::class, 'store']);
     }); 
 
-
-    /* CONTACT */
-    Route::prefix('contact')->group(function() {
-        Route::get('/', [ContactController::class, 'index']);
-        Route::post('/', [ContactController::class, 'store']);
-        Route::get('/{id}', [ContactController::class, 'view']);
-        Route::post('/{id}', [ContactController::class, 'update']);
-        Route::delete('/{id}', [ContactController::class, 'delete']);
+    /* BOOKING */
+    Route::prefix('booking')->group(function() { 
+        Route::get('/', [BookingController::class, 'index']);
+        Route::post('/', [BookingController::class, 'store']);
+        Route::get('/{id}', [BookingController::class, 'view']);
+        Route::post('/{id}', [BookingController::class, 'update']);
+        Route::delete('/{id}', [BookingController::class, 'delete']);
     });
-    Route::get('/contact-search/{search}', [ContactController::class, 'search']);
-    Route::get('/contact-all', [ContactController::class, 'indexAll']);
+    Route::post('/booking-status/{id}', [BookingController::class, 'updateStatus']);
+    Route::get('/booking-search', [BookingController::class, 'search']);
 
+    /* SCHEDULE */
+    Route::prefix('schedule')->group(function() { 
+        Route::get('/', [ScheduleController::class, 'index']);
+        Route::get('/{id}', [ScheduleController::class, 'view']);
+    });
+    Route::get('schedule-delete', [ScheduleController::class, 'delete']);
+    Route::post('/schedule-status/{id}', [ScheduleController::class, 'updateStatus']);
+    Route::post('/schedule-admin', [ScheduleController::class, 'storeAdminSchedule']);
+    Route::get('/schedule-search', [ScheduleController::class, 'search']);
+    Route::get('/schedule-by-date-time', [ScheduleController::class, 'indexByDateTime']);
 
+    /* SCHEDULE BOOKING */
+    Route::prefix('schedule-booking')->group(function() {
+        Route::get('/', [ScheduleBookingController::class, 'index']);
+        Route::post('/', [ScheduleBookingController::class, 'store']);
+        Route::get('/{id}', [ScheduleBookingController::class, 'view']);
+        Route::post('/{id}', [ScheduleBookingController::class, 'update']);
+        Route::delete('/{id}', [ScheduleBookingController::class, 'delete']);
+    });
+    Route::post('/schedule-booking-status/{id}', [ScheduleBookingController::class, 'updateStatus']);
+    Route::get('/schedule-booking-search', [ScheduleBookingController::class, 'search']);
+    Route::get('/schedule-booking-all', [ScheduleBookingController::class, 'indexAll']);
+    
+
+    /* LOCATION */
+    Route::prefix('location')->group(function() {
+        Route::get('/', [LocationController::class, 'index']);
+        Route::post('/', [LocationController::class, 'store']);
+        Route::get('/{id}', [LocationController::class, 'view']);
+        Route::post('/{id}', [LocationController::class, 'update']);
+        Route::delete('/{id}', [LocationController::class, 'delete']);
+    });
+    Route::get('/location-search', [LocationController::class, 'search']);
+    Route::get('/location-all', [LocationController::class, 'indexAll']);
+    
+
+    /* TABLE */
+    Route::prefix('table')->group(function() {
+        Route::get('/', [TableController::class, 'index']);
+        Route::post('/', [TableController::class, 'store']);
+        Route::get('/{id}', [TableController::class, 'view']);
+        Route::post('/{id}', [TableController::class, 'update']);
+        Route::delete('/{id}', [TableController::class, 'delete']);
+    });
+    Route::get('/table-search', [TableController::class, 'search']);
+    Route::get('/table-by-location-id/{id}', [TableController::class, 'indexByLocationId']);
+    Route::get('/table-all', [TableController::class, 'indexAll']);
+    
     /* USER */
     Route::prefix('user')->group(function() {
         Route::get('/', [UserController::class, 'index']);
@@ -57,35 +104,5 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('/user-search/{search}', [UserController::class, 'search']);
     Route::get('/user-all', [UserController::class, 'indexAll']);
 
-
-    /* TABLE FLOOR PLAN */
-    Route::prefix('table-floor-plan')->group(function() {
-        Route::get('/', [TableFloorPlanController::class, 'index']);
-        Route::post('/', [TableFloorPlanController::class, 'store']);
-        Route::get('/{id}', [TableFloorPlanController::class, 'view']);
-        Route::post('/{id}', [TableFloorPlanController::class, 'update']);
-        Route::delete('/{id}', [TableFloorPlanController::class, 'delete']);
-    });
-    Route::get('/table-floor-plan-by-floor', [TableFloorPlanController::class, 'indexByFloor']);
-    Route::get('/table-floor-plan-search/{search}', [TableFloorPlanController::class, 'search']);
-    Route::get('/table-floor-plan-search-all/{search}', [TableFloorPlanController::class, 'searchAll']);
-    Route::get('/table-floor-plan-all', [TableFloorPlanController::class, 'indexAll']);
-    Route::get('/table-floor-plan-all-with-booking', [TableFloorPlanController::class, 'indexAllWithBooking']);
-    Route::post('/table-floor-plan-store-all', [TableFloorPlanController::class, 'storeAll']);
-
-
-    Route::prefix('table-booking-schedule')->group(function() {
-        Route::get('/', [TableBookingScheduleController::class, 'index']);
-        Route::post('/', [TableBookingScheduleController::class, 'store']);
-        Route::get('/{id}', [TableBookingScheduleController::class, 'view']);
-        Route::post('/{id}', [TableBookingScheduleController::class, 'update']);
-        Route::delete('/{id}', [TableBookingScheduleController::class, 'delete']);
-    });
-    Route::get('/table-booking-schedule-search/{search}', [TableBookingScheduleController::class, 'search']);
-    Route::get('/table-booking-schedule-by-date-time', [TableBookingScheduleController::class, 'indexByDateTime']);
-    Route::get('/table-booking-schedule-by-floor-date', [TableBookingScheduleController::class, 'indexByFloorDate']);
-    Route::get('/table-booking-schedule-by-floor-time', [TableBookingScheduleController::class, 'indexByFloorTime']);
-    Route::get('/table-booking-schedule-by-date', [TableBookingScheduleController::class, 'indexByDate']);
-    Route::get('/table-booking-schedule-by-status', [TableBookingScheduleController::class, 'indexByStatus']);
 
 });

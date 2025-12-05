@@ -13,7 +13,7 @@ class AppInfoResource extends JsonResource
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
-    {
+    { 
         return [
             'id' => $this->id,
             'userId' => $this->userId,
@@ -25,6 +25,7 @@ class AppInfoResource extends JsonResource
             'website' => $this->website,
             'whatsapp' => $this->whatsapp,
             'facebook' => $this->facebook,
+            'instagram' => $this->instagram,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
             'user' => new UserResource($this->whenLoaded('user')),

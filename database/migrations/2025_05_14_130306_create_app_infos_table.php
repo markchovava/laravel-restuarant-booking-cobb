@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('website')->nullable();
             $table->string('facebook')->nullable();
             $table->string('whatsapp')->nullable();
+            $table->string('instagram')->nullable();
             $table->timestamps();
         });
     }

@@ -2,25 +2,26 @@
 
 namespace App\Mail;
 
-use App\Models\TableBookingSchedule;
+use App\Models\Contact;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-
-class BookingAdminMail extends Mailable
+class ContactMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $data;
+    public $contact;
+    
     /**
      * Create a new message instance.
      */
-    public function __construct(TableBookingSchedule $data)
+    public function __construct(Contact $contact)
     {
-        $this->data = $data;
+        $this->contact = $contact;
     }
 
     /**
@@ -29,10 +30,9 @@ class BookingAdminMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'NEW BOOKING NOTIFICATION - ' . $this->data->bookingRef,
+            subject: 'Reservation Contact Mail',
         );
     }
-    
 
     /**
      * Get the message content definition.
@@ -40,17 +40,7 @@ class BookingAdminMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'notify-admin',
-            with: [
-                'bookingRef' => $this->data->bookingRef,
-                'fullName' => $this->data->fullName,
-                'email' => $this->data->email,
-                'phone' => $this->data->phone,
-                'numberOfGuests' => $this->data->numberOfGuests,
-                'date' => $this->data->date,
-                'time' => $this->data->time,
-                'notes' => $this->data->notes,
-            ]
+            view: 'contact',
         );
     }
 

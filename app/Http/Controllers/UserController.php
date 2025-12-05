@@ -61,7 +61,7 @@ class UserController extends Controller
         $data->name = $request->name;
         $data->email = $request->email;
         $data->phone = $request->phone;
-        $data->accessLevel = $request->accessLevel;
+        $data->roleLevel = $request->roleLevel;
         $data->isAdmin = $request->isAdmin;
         $data->code = $this->generateRandomText(8);
         $data->password = Hash::make($data->code);
@@ -77,11 +77,21 @@ class UserController extends Controller
     }
 
     public function update(Request $request, $id){
+        $email = User::where('id', '!=', $id)
+            ->where('email', $request->email)
+            ->first();
+        if(isset($email)){
+            return response()->json([
+                'status' => 0,
+                'message' => 'Email already exists, try another one.',
+                'data' => []
+            ]);
+        }
         $data = User::find($id);
         $data->name = $request->name;
         $data->email = $request->email;
         $data->phone = $request->phone;
-        $data->accessLevel = $request->accessLevel;
+        $data->roleLevel = $request->roleLevel;
         $data->isAdmin = $request->isAdmin;
         $data->address = $request->address;
         $data->updated_at = now();
@@ -105,7 +115,7 @@ class UserController extends Controller
         return response()->json([
             'message' => 'User deleted Successfully.',
             'status' => 1,
-            'data' => []
+            'data' => ''
         ]);
 
     }

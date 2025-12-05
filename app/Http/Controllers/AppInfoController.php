@@ -16,7 +16,6 @@ class AppInfoController extends Controller
         $data = AppInfo::first();
     
         if(!isset($data)) {
-            Log::info("--------- New");
             $data = AppInfo::create(array_merge(
                 $request->only([
                     'name', 
@@ -26,6 +25,7 @@ class AppInfoController extends Controller
                     'description', 
                     'website', 
                     'facebook', 
+                    'instagram',
                     'whatsapp'
                 ]),
                 ['userId' => $userId]
@@ -46,12 +46,13 @@ class AppInfoController extends Controller
                 'description', 
                 'website', 
                 'facebook', 
+                'instagram',
                 'whatsapp'
             ]),
             ['userId' => $userId]
         ));
     
-        Log::info($data);
+        // Log::info($data);
         return response()->json([
             'status' => 1,
             'message' => 'Data successfully saved.',
@@ -69,6 +70,5 @@ class AppInfoController extends Controller
         return new AppInfoResource($data);
        
     }
-
 
 }

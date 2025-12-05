@@ -7,16 +7,19 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
+     * 
      * Run the migrations.
+     * 
      */
     public function up(): void
     {
-        Schema::create('contacts', function (Blueprint $table) {
+        Schema::create('tables', function (Blueprint $table) {
             $table->id();
-            $table->mediumInteger('userId')->nullable();
+            $table->bigInteger('userId')->nullable();
+            $table->bigInteger('locationId')->nullable();
             $table->string('name')->nullable();
-            $table->longText('message')->nullable();
-            $table->string('email')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->string('seats')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contacts');
+        Schema::dropIfExists('tables');
     }
 };
